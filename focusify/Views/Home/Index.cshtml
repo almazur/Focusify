@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+    <link rel="shortcut icon" type="image/ico" href="@Url.Content("favicon.ico")">
+
+    <div class="jumbotron">
+        <h1>Focusify</h1>
+        <p class="lead">Application controlling music playing based on your focus detected via EEG headset.</p>
+        <p><a class="btn btn-default" href="/Home/Launch">Start &raquo;</a></p>
+    </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>EEG headset</h2>
+        <p>
+            Focusify works base on your focus level detected via NeuroSky MindWave EEG headset.
+        </p>
+        <p><a class="btn btn-default" href="http://neurosky.com/biosensors/eeg-sensor/biosensors/">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-6">
+        <h2>Spotify</h2>
+        <p>Focusify allows you to listen music perfect for your current focus level. It dynamically adds music to the queue and adjusts music volume.</p>
+    </div>
+</div>

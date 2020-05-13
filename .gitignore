@@ -7,13 +7,16 @@
 **/[Dd]ebug/*
 **/[Rr]elease/*
 #x64/
-#[Bb]in/
-[Oo]bj/
+**/[Bb]in/*
+**/[Oo]bj/
 # build folder is nowadays used for build scripts and should not be ignored
 #build/
 
 # Include unmanaged ddl provided by Neurosky
-!**/thinkgear64.dll
+!**/thinkgear.dll
+
+# Exclude resources with client data
+**/Resources/*
 
 # NuGet Packages
 *.nupkg

@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 
 namespace libStreamSDK
 {
     public class NativeThinkgear
     {
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_GetVersion", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_GetVersion", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_GetVersion();
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_GetNewConnectionId", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_GetNewConnectionId", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_GetNewConnectionId();
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_SetStreamLog", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int TG_SetStreamLog(int connectionId, string filename);
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_SetStreamLog", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int TG_SetStreamLog( int connectionId, string filename );
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_SetDataLog", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_SetDataLog", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_SetDataLog(int connectionId, string filename);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_WriteStreamLog", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_WriteStreamLog", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_WriteStreamLog(int connectionId, int insertTimestamp, string msg);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_WriteDataLog", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_WriteDataLog", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_WriteDataLog(int connectionId, int insertTimestamp, string msg);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_Connect", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_Connect", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_Connect(int connectionId, string serialPortName, int serialBaudrate,
-            int serialDataFormat);
+            int serialDataFormat );
 
         public static int TG_Connect(int connectionId, string serialPortName, Baudrate baudrate,
             SerialDataFormat format)
@@ -38,10 +35,10 @@ namespace libStreamSDK
 
 
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_ReadPackets", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_ReadPackets", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_ReadPackets(int connectionId, int numPackets);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_GetValueStatus", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_GetValueStatus", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_GetValueStatus(int connectionId, int dataType);
         public static int TG_GetValueStatus(int connectionId, DataType dataType)
         {
@@ -49,17 +46,17 @@ namespace libStreamSDK
         }
 
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_GetValue", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_GetValue", CallingConvention = CallingConvention.Cdecl)]
         public static extern float TG_GetValue(int connectionId, int dataType);
         public static float TG_GetValue(int connectionId, DataType dataType)
         {
             return TG_GetValue(connectionId, (int)dataType);
         }
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_SendByte", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_SendByte", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_SendByte(int connectionId, int b);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_SetBaudrate", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_SetBaudrate", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_SetBaudrate(int connectionId, int serialBaudrate);
         public static int TG_SetBaudrate(int connectionId, Baudrate baudrate)
         {
@@ -67,18 +64,19 @@ namespace libStreamSDK
         }
 
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_EnableAutoRead", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_EnableAutoRead", CallingConvention = CallingConvention.Cdecl)]
         public static extern int TG_EnableAutoRead(int connectionId, int enable);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_Disconnect", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_Disconnect", CallingConvention = CallingConvention.Cdecl)]
         public static extern void TG_Disconnect(int connectionId);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "TG_FreeConnection", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "TG_FreeConnection", CallingConvention = CallingConvention.Cdecl)]
         public static extern void TG_FreeConnection(int connectionId);
-        [DllImport(@"thinkgear64.dll", EntryPoint = "MWM15_getFilterType", CallingConvention = CallingConvention.Cdecl)]
+
+        [DllImport(@"thinkgear.dll", EntryPoint = "MWM15_getFilterType", CallingConvention = CallingConvention.Cdecl)]
         public static extern int MWM15_getFilterType(int connectionId);
 
-        [DllImport(@"thinkgear64.dll", EntryPoint = "MWM15_setFilterType", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"thinkgear.dll", EntryPoint = "MWM15_setFilterType", CallingConvention = CallingConvention.Cdecl)]
         public static extern int MWM15_setFilterType(int connectionId, int filterType);
         public static int MWM15_setFilterType(int connectionId, FilterType filterType)
         {
