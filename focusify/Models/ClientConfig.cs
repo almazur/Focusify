@@ -11,8 +11,6 @@ namespace focusify.Models
         {
             string configJson = System.IO.File.ReadAllText(configFile);
 
-            Console.WriteLine(configJson);
-
             return JsonSerializer.Deserialize<ClientConfig>(configJson);
         }
 

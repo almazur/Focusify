@@ -161,6 +161,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\TokenInfo.cs" />
+    <Compile Include="Models\ThinkgearWorker.cs" />
     <Compile Include="Models\ClientConfig.cs" />
     <Compile Include="Models\NativeThinkgear.cs" />
     <Compile Include="Models\Program.cs" />
