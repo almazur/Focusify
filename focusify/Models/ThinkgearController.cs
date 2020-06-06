@@ -7,14 +7,14 @@ namespace focusify
     {
         public int connect()
         {
-            NativeThinkgear thinkgear = new NativeThinkgear();
+            System.Diagnostics.Debug.WriteLine("hello");
 
             /* Print driver version number */
-            Console.WriteLine("Version: " + NativeThinkgear.TG_GetVersion());
+            System.Diagnostics.Debug.WriteLine("Version: " + NativeThinkgear.TG_GetVersion());
 
             /* Get a connection ID handle to ThinkGear */
             int connectionID = NativeThinkgear.TG_GetNewConnectionId();
-            Console.WriteLine("Connection ID: " + connectionID);
+            System.Diagnostics.Debug.WriteLine("Connection ID: " + connectionID);
 
             if (connectionID < 0)
             {
@@ -22,24 +22,26 @@ namespace focusify
             }
 
             int errCode = 0;
-            /* Set/open stream (raw bytes) log file for connection */
-            errCode = NativeThinkgear.TG_SetStreamLog(connectionID, "streamLog.txt");
-            Console.WriteLine("errCode for TG_SetStreamLog : " + errCode);
+            // Set/open stream (raw bytes) log file for connection
+            string streamLogPath = "C:\\Users\\Mateusz\\focusify\\streamLog.txt";
+            errCode = NativeThinkgear.TG_SetStreamLog(connectionID, streamLogPath);
+            System.Diagnostics.Debug.WriteLine("errCode for TG_SetStreamLog : " + errCode);
             if (errCode < 0)
             {
                 throw new SystemException("ERROR: TG_SetStreamLog() returned: " + errCode);
             }
 
-            /* Set/open data (ThinkGear values) log file for connection */
-            errCode = NativeThinkgear.TG_SetDataLog(connectionID, "dataLog.txt");
-            Console.WriteLine("errCode for TG_SetDataLog : " + errCode);
+            // Set/open data (ThinkGear values) log file for connection
+            string dataLogPath = "C:\\Users\\Mateusz\\focusify\\dataLog.txt";
+            errCode = NativeThinkgear.TG_SetDataLog(connectionID, dataLogPath);
+            System.Diagnostics.Debug.WriteLine("errCode for TG_SetDataLog : " + errCode);
             if (errCode < 0)
             {
                 throw new SystemException("ERROR: TG_SetDataLog() returned: " + errCode);
-            }
+            }//*/
 
             /* Attempt to connect the connection ID handle to serial port "COM5" */
-            string comPortName = "\\\\.\\COM3";
+            string comPortName = "\\\\.\\COM6";
 
             errCode = NativeThinkgear.TG_Connect(connectionID,
                           comPortName,
@@ -63,7 +65,7 @@ namespace focusify
 
                 /* Attempt to read a Packet of data from the connection */
                 errCode = NativeThinkgear.TG_ReadPackets(connectionID, 1);
-                Console.WriteLine("TG_ReadPackets returned: " + errCode);
+                System.Diagnostics.Debug.WriteLine("TG_ReadPackets returned: " + errCode);
                 /* If TG_ReadPackets() was able to read a complete Packet of data... */
                 if (errCode == 1)
                 {
@@ -74,9 +76,18 @@ namespace focusify
                     {
 
                         /* Get and print out the updated attention value */
-                        Console.WriteLine("New Attention value: : " + (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_ATTENTION));
+                        System.Diagnostics.Debug.WriteLine("New Attention value: : " + (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_ATTENTION));
 
                     } /* end "If attention value has been updated..." */
+
+                    /* If raw value has been updated by TG_ReadPackets()... */
+                    if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_ALPHA1) != 0)
+                    {
+
+                        /* Get and print out the updated raw value */
+                        System.Diagnostics.Debug.WriteLine("New raw value: : " + (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_RAW));
+
+                    } /* end "If raw value has been updated..." */
 
                 } /* end "If a Packet of data was read..." */
 
