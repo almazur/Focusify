@@ -45,10 +45,10 @@ namespace focusify.Models
                 {
                     var timeToEnd = spotifyController.getTimeToEnd();
 
-                    if (!setNextSong && timeToEnd >= 5000)
+                    if (!setNextSong && timeToEnd >= 6000)
                         setNextSong = true;
 
-                    if (setNextSong && timeToEnd <= 3000 && attentionBuffer.Take(10).Length != 0)
+                    if (setNextSong && timeToEnd <= 4000 && attentionBuffer.Take(10).Length != 0)
                     {
                         var attention = attentionBuffer.Take(10).Average();
 
