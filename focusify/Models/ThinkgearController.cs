@@ -1,106 +1,80 @@
-﻿using libStreamSDK;
-using System;
+﻿using System;
+using System.Text;
+using System.IO;
+using System.Net.Sockets;
 
-namespace focusify
+using Newtonsoft.Json;
+using System.Threading;
+
+namespace focusify.Models
 {
     public class ThinkgearController
     {
-        public int connect()
+        TcpClient client;
+        Stream stream;
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        FixedSizedQueue<int> attentionBuffer;
+
+        public ThinkgearController(FixedSizedQueue<int> attentionBuffer)
         {
-            System.Diagnostics.Debug.WriteLine("hello");
-
-            /* Print driver version number */
-            System.Diagnostics.Debug.WriteLine("Version: " + NativeThinkgear.TG_GetVersion());
-
-            /* Get a connection ID handle to ThinkGear */
-            int connectionID = NativeThinkgear.TG_GetNewConnectionId();
-            System.Diagnostics.Debug.WriteLine("Connection ID: " + connectionID);
-
-            if (connectionID < 0)
-            {
-                throw new SystemException("ERROR: TG_GetNewConnectionId() returned: " + connectionID);
-            }
-
-            int errCode = 0;
-            // Set/open stream (raw bytes) log file for connection
-            string streamLogPath = "C:\\Users\\Mateusz\\focusify\\streamLog.txt";
-            errCode = NativeThinkgear.TG_SetStreamLog(connectionID, streamLogPath);
-            System.Diagnostics.Debug.WriteLine("errCode for TG_SetStreamLog : " + errCode);
-            if (errCode < 0)
-            {
-                throw new SystemException("ERROR: TG_SetStreamLog() returned: " + errCode);
-            }
-
-            // Set/open data (ThinkGear values) log file for connection
-            string dataLogPath = "C:\\Users\\Mateusz\\focusify\\dataLog.txt";
-            errCode = NativeThinkgear.TG_SetDataLog(connectionID, dataLogPath);
-            System.Diagnostics.Debug.WriteLine("errCode for TG_SetDataLog : " + errCode);
-            if (errCode < 0)
-            {
-                throw new SystemException("ERROR: TG_SetDataLog() returned: " + errCode);
-            }//*/
-
-            /* Attempt to connect the connection ID handle to serial port "COM5" */
-            string comPortName = "\\\\.\\COM6";
-
-            errCode = NativeThinkgear.TG_Connect(connectionID,
-                          comPortName,
-                          NativeThinkgear.Baudrate.TG_BAUD_57600,
-                          NativeThinkgear.SerialDataFormat.TG_STREAM_PACKETS);
-            if (errCode < 0)
-            {
-                throw new SystemException("ERROR: TG_Connect() returned: " + errCode);
-            }
-
-            return connectionID;
+            this.attentionBuffer = attentionBuffer;
         }
 
-        public void readPackets(int connectionID, int packetsToRead)
+        public void InitConnection()
         {
-            int errCode;
-            /* Read packetsToRead ThinkGear Packets from the connection, 1 Packet at a time */
-            int packetsRead = 0;
-            while (packetsRead < packetsToRead)
-            {
+            client = new TcpClient("127.0.0.1", 13854);
+            stream = client.GetStream();
 
-                /* Attempt to read a Packet of data from the connection */
-                errCode = NativeThinkgear.TG_ReadPackets(connectionID, 1);
-                System.Diagnostics.Debug.WriteLine("TG_ReadPackets returned: " + errCode);
-                /* If TG_ReadPackets() was able to read a complete Packet of data... */
-                if (errCode == 1)
+            System.Diagnostics.Debug.WriteLine("Sending configuration packet to device.");
+
+            var com = @"{""enableRawOutput"": false, ""format"": ""Json""}";
+            byte[] myWriteBuffer = Encoding.ASCII.GetBytes(com);
+            stream.Write(myWriteBuffer, 0, myWriteBuffer.Length);
+        }
+
+        public void CollectData()
+        {
+            System.Diagnostics.Debug.WriteLine("Starting data collection.");
+            while (true)
+            {
+                bytesRead = stream.Read(buffer, 0, 4096);
+                string[] packets = Encoding.UTF8.GetString(buffer, 0, bytesRead).Split('\r');
+
+                foreach (string s in packets)
                 {
-                    packetsRead++;
-
-                    /* If attention value has been updated by TG_ReadPackets()... */
-                    if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_ATTENTION) != 0)
+                    if (String.IsNullOrEmpty(s))
                     {
-
-                        /* Get and print out the updated attention value */
-                        System.Diagnostics.Debug.WriteLine("New Attention value: : " + (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_ATTENTION));
-
-                    } /* end "If attention value has been updated..." */
-
-                    /* If raw value has been updated by TG_ReadPackets()... */
-                    if (NativeThinkgear.TG_GetValueStatus(connectionID, NativeThinkgear.DataType.TG_DATA_ALPHA1) != 0)
+                        continue;
+                    }
+                    try
                     {
+                        dynamic data = JsonConvert.DeserializeObject(s);
+                        //System.Diagnostics.Debug.WriteLine(data);
 
-                        /* Get and print out the updated raw value */
-                        System.Diagnostics.Debug.WriteLine("New raw value: : " + (int)NativeThinkgear.TG_GetValue(connectionID, NativeThinkgear.DataType.TG_DATA_RAW));
-
-                    } /* end "If raw value has been updated..." */
-
-                } /* end "If a Packet of data was read..." */
-
-            } /* end "Read 10 Packets of data from connection..." */
-
+                        if (data["status"] != null)
+                        {
+                            //System.Diagnostics.Debug.WriteLine("Device status: " + data["status"]);
+                        }
+                        if (data["eSense"] != null)
+                        {
+                            attentionBuffer.Enqueue((int) data.eSense.attention);
+                            //System.Diagnostics.Debug.WriteLine("attention: " + data.eSense.attention.ToString() + ", meditation: " + data.eSense.meditation.ToString() + ",0");
+                            //System.Diagnostics.Debug.WriteLine(attentionBuffer.ToString());
+                        }
+                        if (data["blinkStrength"] != null)
+                        {
+                            //System.Diagnostics.Debug.WriteLine("blink: " + data.blinkStrength.ToString(), ",0");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Error in data collection: " + e.Message);
+                    }
+                }
+                Thread.Sleep(500);
+            }
         }
 
-        public void disconnect(int connectionID)
-        {
-            NativeThinkgear.TG_Disconnect(connectionID);
-
-            /* Clean up */
-            NativeThinkgear.TG_FreeConnection(connectionID);
-        }
     }
 }

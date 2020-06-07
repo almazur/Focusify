@@ -24,7 +24,6 @@ namespace focusify.Controllers
         public ActionResult Settings()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
@@ -32,12 +31,12 @@ namespace focusify.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
-            string scope = "user-modify-playback-state";
+            string scopes = "user-modify-playback-state user-read-playback-state user-read-currently-playing";
 
             string authorizeQuery = "https://accounts.spotify.com/authorize" 
                 + "?response_type=code"
                 + "&client_id=" + clientID
-                + "&scope=" + scope
+                + "&scope=" + Uri.EscapeDataString(scopes)
                 + "&redirect_uri=" + Uri.EscapeDataString(redirectURI);
 
             Response.Redirect(authorizeQuery);

@@ -63,6 +63,12 @@
     <Reference Include="FLS, Version=1.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FLS.1.1.6.0\lib\net45\FLS.dll</HintPath>
     </Reference>
+    <Reference Include="Jayrock, Version=0.9.16530.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jayrock.0.9.16530.1\lib\net40\Jayrock.dll</HintPath>
+    </Reference>
+    <Reference Include="Jayrock.Json, Version=0.9.16530.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jayrock-json.0.9.16530\lib\net40\Jayrock.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -177,6 +183,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\MusicController.cs" />
+    <Compile Include="Models\SpotifyController.cs" />
+    <Compile Include="Models\FixedSizedQueue.cs" />
     <Compile Include="Models\TokenInfo.cs" />
     <Compile Include="Models\ThinkgearWorker.cs" />
     <Compile Include="Models\ClientConfig.cs" />
