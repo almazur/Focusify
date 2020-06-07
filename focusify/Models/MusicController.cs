@@ -9,8 +9,9 @@ namespace focusify.Models
         private SpotifyController spotifyController;
         private FixedSizedQueue<int> attentionBuffer;
 
-        private string calmPlayList = "224djalW5N9R0mi72HOQba";
-        private string absorbingPlayList = "0bpVDliLq1xXITzGePfkyc";
+        private static AppSettings appSettings = AppSettings.Get();
+        private string calmPlayList = appSettings.Focused;
+        private string absorbingPlayList = appSettings.NotFocused;
 
         private bool setNextSong = true;
 

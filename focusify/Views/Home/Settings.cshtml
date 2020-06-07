@@ -1,6 +1,41 @@
 ﻿@{
     ViewBag.Title = "Settings";
 }
-<h2>@ViewBag.Title.</h2>
 
-<p>User settings here.</p>
+<div class="jumbotron">
+    <h2>Settings</h2>
+</div>
+
+@model focusify.Models.AppSettings
+@using (Html.BeginForm("Playlists", "Home", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <br>
+            <p>
+                When I am focused, play
+            </p>
+            @Html.TextBoxFor(m => m.Focused, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <br>
+            <p>
+                When I am focused, play
+            </p>
+            @Html.TextBoxFor(m => m.NotFocused, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <br>
+            <input type="submit" value="Submit" />
+        </div>
+    </div>
+}

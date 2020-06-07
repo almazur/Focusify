@@ -183,6 +183,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\MusicController.cs" />
     <Compile Include="Models\SpotifyController.cs" />
     <Compile Include="Models\FixedSizedQueue.cs" />

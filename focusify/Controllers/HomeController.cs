@@ -15,6 +15,7 @@ namespace focusify.Controllers
         private readonly string redirectURI = "http://localhost:8888/home/auth";
         private readonly string clientSecret = ClientConfig.Get().secret;
         private readonly string clientID = ClientConfig.Get().id;
+        private static readonly string settingsFile = System.Web.HttpContext.Current.Server.MapPath(@"\Resources\settings.json");
 
         public ActionResult Index()
         {
@@ -23,8 +24,14 @@ namespace focusify.Controllers
 
         public ActionResult Settings()
         {
-            ViewBag.Message = "Your application description page.";
-            return View();
+            if (!System.IO.File.Exists(settingsFile))
+            {
+                string defaultFocused = "224djalW5N9R0mi72HOQba";
+                string defaultNotFocused = "0bpVDliLq1xXITzGePfkyc";
+                string json = "{\"Focused\":\"" + defaultFocused + "\", \"NotFocused\":\"" + defaultNotFocused + "\"}";
+                System.IO.File.WriteAllText(settingsFile, json);
+            }
+            return View(AppSettings.Get());
         }
 
         public ActionResult Launch()
@@ -75,6 +82,14 @@ namespace focusify.Controllers
                 var response = await client.PostAsync(query, new StringContent(body, Encoding.UTF8, "application/x-www-form-urlencoded"));
                 return response.Content.ReadAsStringAsync().Result;
             }
+        }
+        public ActionResult Playlists(AppSettings appSettings)
+        {
+            string focused = appSettings.Focused;
+            string notFocused = appSettings.NotFocused;
+            string json = "{\"Focused\":\"" + focused + "\", \"NotFocused\":\"" + notFocused + "\"}";
+            System.IO.File.WriteAllText(settingsFile, json);
+            return RedirectToAction("Settings", "Home");
         }
     }
 }
