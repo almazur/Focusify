@@ -10,32 +10,38 @@
 @using (Html.BeginForm("Playlists", "Home", FormMethod.Post))
 {
     <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <br>
-            <p>
-                When I am focused, play
-            </p>
-            @Html.TextBoxFor(m => m.Focused, new { @class = "form-control" })
+        <div class="col-md-6">
+            <div class="col-md-1"></div>
+            <div class="col-md-8">
+                <br>
+                <p>
+                    When I am focused, play
+                </p>
+                @Html.TextBoxFor(m => m.Focused, new { @class = "form-control" })
+            </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <br>
-            <p>
-                When I am focused, play
-            </p>
-            @Html.TextBoxFor(m => m.NotFocused, new { @class = "form-control" })
+        <div class="col-md-6">
+            <div class="col-md-1"></div>
+            <div class="col-md-8">
+                <br>
+                <p>
+                    When I am relaxed, play
+                </p>
+                @Html.TextBoxFor(m => m.NotFocused, new { @class = "form-control" })
+            </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <br>
-            <input type="submit" value="Submit" />
+        <div class="col-md-6">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <br>
+                <input type="submit" value="Submit" class="btn"/>
+            </div>
         </div>
     </div>
 }

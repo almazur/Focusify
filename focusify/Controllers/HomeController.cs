@@ -26,8 +26,8 @@ namespace focusify.Controllers
         {
             if (!System.IO.File.Exists(settingsFile))
             {
-                string defaultFocused = "224djalW5N9R0mi72HOQba";
-                string defaultNotFocused = "0bpVDliLq1xXITzGePfkyc";
+                string defaultFocused = "37i9dQZF1DWZOdmeRPNiwo"; //"224djalW5N9R0mi72HOQba";
+                string defaultNotFocused = "37i9dQZF1DZ06evO0YHpAV"; //"0bpVDliLq1xXITzGePfkyc";
                 string json = "{\"Focused\":\"" + defaultFocused + "\", \"NotFocused\":\"" + defaultNotFocused + "\"}";
                 System.IO.File.WriteAllText(settingsFile, json);
             }
